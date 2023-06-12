@@ -1,4 +1,4 @@
-package key_value_client
+package client
 
 import (
 	"net"
@@ -6,16 +6,16 @@ import (
 
 const BUF_SIZE = 1024
 
-type KyeValueClient struct {
+type KeyValueClient struct {
 	addr string
 	conn net.Conn
 }
 
-func New(addr string) KyeValueClient {
-	return KyeValueClient{addr, nil}
+func New(addr string) KeyValueClient {
+	return KeyValueClient{addr, nil}
 }
 
-func (r *KyeValueClient) Connect() error {
+func (r *KeyValueClient) Connect() error {
 	tcpAddr, err := net.ResolveTCPAddr("tcp", r.addr)
 
 	if err != nil {
@@ -33,7 +33,7 @@ func (r *KyeValueClient) Connect() error {
 	return nil
 }
 
-func (r *KyeValueClient) Set(key, value string) (string, error) {
+func (r *KeyValueClient) Set(key, value string) (string, error) {
 	r.conn.Write([]byte("set " + key + " " + value))
 
 	buf := make([]byte, BUF_SIZE)
@@ -47,7 +47,7 @@ func (r *KyeValueClient) Set(key, value string) (string, error) {
 	return string(buf[0:resLen]), nil
 }
 
-func (r *KyeValueClient) Get(key string) (string, error) {
+func (r *KeyValueClient) Get(key string) (string, error) {
 	r.conn.Write([]byte("get " + key))
 
 	buf := make([]byte, BUF_SIZE)
